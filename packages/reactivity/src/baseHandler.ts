@@ -17,11 +17,12 @@ export const baseHandler = {
 
   set(target, key, value, receiver) {
     let oldvalue = target[key];
-
-    if (oldvalue === value) {
+    let result = Reflect.set(target, key, value, receiver);
+    if (oldvalue !== value) {
       // 触发更新逻辑
       trigger(target, "set", key, value);
     }
-    return Reflect.set(target, key, value, receiver);
+
+    return result;
   },
 };
