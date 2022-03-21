@@ -4,6 +4,8 @@
   "description": "实现vue3源码",
   "main": "index.js",
   "scripts": {
+    "vite": "vite",
+    "dev": "node scripts/dev.js reactivity -f esm-bundler",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -27,5 +29,8 @@
     "rollup": "^2.70.1",
     "rollup-plugin-typescript2": "^0.31.2",
     "typescript": "^4.6.2"
+  },
+  "dependencies": {
+    "vite": "^2.8.6"
   }
 }
