@@ -1,11 +1,11 @@
-import { reactive, effect } from "@hpstream/reactivity";
+import { effect, reactive } from "@hpstream/reactivity";
 
 const state = reactive({ name: "jw", age: 30 });
 
 effect(() => {
   var app = document.querySelector("#app");
   app.innerHTML = state.name + "今年" + state.age + "岁了";
-  console.log(state);
+  // console.log(state);
 });
 setTimeout(() => {
   state.age++;

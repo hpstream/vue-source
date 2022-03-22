@@ -36,3 +36,12 @@ pnpm tsc --init
 
 ```
 
+## 实现功能：
+- [x] 响应式proxy;
+- [x] 实现effect;
+- [x] 实现依赖收集；
+
+
+## 案例
+1. pages/reactive  响应式案例
+2. pages/setLoop  set导致死循环的原因

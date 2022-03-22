@@ -20,11 +20,12 @@ export class ReactiveEffect {
     try {
       this.parent = activeEffect;
       activeEffect = this;
-      // cleanupEffect(this);
-
+      cleanupEffect(this);
+      debugger;
       return this.fn();
     } catch (error) {
     } finally {
+      // console.log(11, "ss");
       activeEffect = this.parent;
     }
   }
@@ -64,12 +65,11 @@ export function track(target, type: string, key) {
 }
 
 function trackEffects(dep: any) {
-  if (activeEffect) {
-    let sholdTrack = dep.has(activeEffect);
-    if (!sholdTrack) {
-      dep.add(activeEffect);
-      activeEffect.deps.push(dep);
-    }
+  if (!activeEffect) return;
+  let sholdTrack = dep.has(activeEffect);
+  if (!sholdTrack) {
+    dep.add(activeEffect);
+    activeEffect.deps.push(dep);
   }
 }
 
@@ -79,10 +79,11 @@ export function trigger(target, type: string, key, oldvalue) {
   let effects = depsMap.get(key); // 找到了属性对应的effect
 
   // 永远在执行之前 先拷贝一份来执行， 不要关联引用
-  // console.log(effects);
+  console.log(key, effects);
   if (effects) {
     // triggerEffects(effects);
     effects.forEach((effect) => {
+      console.log(key);
       if (effect !== activeEffect) effect.run(); // 防止循环
     });
   }
