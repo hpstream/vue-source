@@ -21,7 +21,7 @@ export class ReactiveEffect {
       this.parent = activeEffect;
       activeEffect = this;
       cleanupEffect(this);
-      debugger;
+      // debugger;
       return this.fn();
     } catch (error) {
     } finally {
@@ -79,7 +79,8 @@ export function trigger(target, type: string, key, oldvalue) {
   let effects = depsMap.get(key); // 找到了属性对应的effect
 
   // 永远在执行之前 先拷贝一份来执行， 不要关联引用
-  console.log(key, effects);
+  // console.log(key, effects);
+  effects = [...effects];
   if (effects) {
     // triggerEffects(effects);
     effects.forEach((effect) => {

@@ -45,3 +45,4 @@ pnpm tsc --init
 ## 案例
 1. pages/reactive  响应式案例
 2. pages/setLoop  set导致死循环的原因
+3. pages/cleanup  分支切换与cleanup(分之切换是否删除依赖收集)
