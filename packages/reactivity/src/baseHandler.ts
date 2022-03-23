@@ -2,8 +2,14 @@ import { isObject } from "@hpstream/shared";
 import { track, trigger } from "./effect";
 import { reactive } from "./reactive";
 
+export const enum ReactiveFlags {
+  IS_REACTIVE = "__v_isReactive",
+}
 export const baseHandler = {
   get(target, key, receiver) {
+    if (key === ReactiveFlags.IS_REACTIVE) {
+      return true;
+    }
     let res = Reflect.get(target, key, receiver);
 
     track(target, "get", key);
