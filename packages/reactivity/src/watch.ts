@@ -14,9 +14,14 @@ export function watch(source, cb: Function) {
     getter = source;
   }
   let oldValue;
+  let cleanup;
+  let onCleanup = (fn) => {
+    cleanup = fn;
+  };
   const job = () => {
     const newValue = effect.run(); // 值变化时再次运行effect函数,获取新值
-    cb(newValue, oldValue);
+    if (cleanup) cleanup();
+    cb(newValue, oldValue, onCleanup);
     oldValue = newValue;
   };
   const effect = new ReactiveEffect(getter, job);

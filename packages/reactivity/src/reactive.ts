@@ -1,7 +1,7 @@
 import { isObject } from "@hpstream/shared";
 import { baseHandler } from "./baseHandler";
 
-export function reactive(target: any) {
+export function reactive<T>(target: T): T {
   if (!isObject(target)) {
     return;
   }
