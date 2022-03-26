@@ -1,6 +1,4 @@
-import { nextTick } from "vue";
-
-export function patchProp(el: Element, key: string, prevValue, nextValue) {
+export function patchProp(el: HTMLElement, key: string, prevValue, nextValue) {
   if (key == "className") {
     patchClass(el, key, prevValue, nextValue);
   }
