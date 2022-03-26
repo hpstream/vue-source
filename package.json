@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "vite": "vite",
-    "dev": "node scripts/dev.js reactivity -f esm-bundler",
+    "dev": "node scripts/dev.js runtime-core -f esm-bundler",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -31,6 +31,7 @@
     "typescript": "^4.6.2"
   },
   "dependencies": {
-    "vite": "^2.8.6"
+    "vite": "^2.8.6",
+    "vue": "^3.2.31"
   }
 }
