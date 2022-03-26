@@ -29,9 +29,6 @@ class RefImpl {
 export function ref(source) {
   return new RefImpl(source);
 }
-var type1 = { name: "", age: 1 };
-
-type s = keyof typeof type1;
 
 class ObjectRefImpl {
   constructor(private source, private key: string) {}
