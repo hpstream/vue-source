@@ -1,4 +1,4 @@
-import { renderOptions } from "@hpstream/runtime-core";
+import { renderOptions } from "@hpstream/runtime-dom";
 import { createRenderer, h } from "vue";
 
 // 准备好所有渲染时所需要的的属性

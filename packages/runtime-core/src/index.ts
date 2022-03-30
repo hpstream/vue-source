@@ -1,6 +1,3 @@
-import { nodeOps } from "./nodeOps";
-import { patchProp } from "./patchProp";
+export function createVNode(type, props, children) {}
 
-const renderOptions = Object.assign(nodeOps, { patchProp });
-
-export { renderOptions };
+export function h(type, props, children) {}
