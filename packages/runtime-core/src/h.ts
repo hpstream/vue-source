@@ -13,9 +13,10 @@
 // h('div',null,'hello','world')
 
 import { isArray, isObject } from "@hpstream/shared";
+import { VNode } from "./type";
 import { createVNode, isVnode } from "./vnode";
 
-export function h(type, propsOrChildren, children) {
+export function h(type, propsOrChildren, children): VNode {
   if (arguments.length == 2) {
     if (isArray(propsOrChildren)) {
       return createVNode(type, null, propsOrChildren);

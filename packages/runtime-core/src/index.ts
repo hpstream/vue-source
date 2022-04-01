@@ -1,2 +1,5 @@
-import { createVNode } from "./vnode";
-import { h } from "./h";
+export { createVNode } from "./vnode";
+export { h } from "./h";
+export { createRenderer } from "./createRenderer";
+
+export * from "./type";

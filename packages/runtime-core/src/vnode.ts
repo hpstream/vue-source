@@ -1,8 +1,9 @@
 import { isArray, isString, ShapeFlags } from "@hpstream/shared";
+import { VNode } from "./type";
 
 export function createVNode(type, props, children) {
   const shapeFlags = isString(type) ? ShapeFlags.ELEMENT : 0;
-  const vnode = {
+  const vnode: VNode = {
     _v_isVnode: true,
     type,
     props,
