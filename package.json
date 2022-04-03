@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "vite": "vite",
-    "dev": "node scripts/dev.js runtime-core -f esm-bundler",
+    "dev:core": "node scripts/dev.js runtime-core -f esm-bundler",
+    "dev:dom": " node scripts/dev.js runtime-dom -f esm-bundler",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

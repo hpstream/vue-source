@@ -23,7 +23,6 @@ function patchClass(
     el.removeAttribute(key);
   } else {
     el.className = nextValue;
-    console.log(el);
   }
 }
 function patchStyle(
@@ -70,7 +69,7 @@ function patchAttr(
 }
 
 function createInvoker(fn: (e: Event) => void) {
-  let invoker: any = (e: Event) => invoker.fn(e);
+  let invoker: any = (e: Event) => invoker.value(e);
   invoker.value = fn;
   return invoker;
 }

@@ -1,11 +1,11 @@
 export interface VNode {
   _v_isVnode: boolean;
-  type: string;
+  type: string | symbol;
   props: Record<string, any>;
   key: string;
   el: HTMLElement;
-  children: vNodeType[];
-  shapeFlags: number | ShapeFlags;
+  children: VNode[];
+  shapeFlag: number | ShapeFlags;
 }
 
 export interface RendererOptions {

@@ -1,19 +1,23 @@
 import { isArray, isString, ShapeFlags } from "@hpstream/shared";
 import { VNode } from "./type";
-
+export const Text = Symbol("Text");
+export function isSameVnode(n1, n2) {
+  // 判断两个虚拟节点是否是相同节点，套路是1）标签名相同 2） key是一样的
+  return n1.type === n2.type && n1.key === n2.key;
+}
 export function createVNode(type, props, children) {
-  const shapeFlags = isString(type) ? ShapeFlags.ELEMENT : 0;
+  const shapeFlag = isString(type) ? ShapeFlags.ELEMENT : 0;
   const vnode: VNode = {
     _v_isVnode: true,
     type,
     props,
-    key: props.key,
+    key: props?.["key"],
     el: null,
     children,
-    shapeFlags,
+    shapeFlag,
   };
   if (children) {
-    let type = 0;
+    type = 0;
     if (isArray(children)) {
       type = ShapeFlags.ARRAY_CHILDREN;
     } else {
@@ -23,7 +27,8 @@ export function createVNode(type, props, children) {
   }
   // 如果 shapeFlag为9，说明元素的children是一个文本；
   // 如果 shapeFlag为17，说明元素的children是一个数组；
-  vnode.shapeFlags += type;
+  vnode.shapeFlag |= type;
+
   return vnode;
 }
 export function isVnode(value) {

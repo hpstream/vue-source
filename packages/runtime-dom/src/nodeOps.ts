@@ -1,6 +1,6 @@
 export const nodeOps = {
   // 增加 删除 修改 查询
-  insert(child, parent, anchor = null) {
+  insert(child, parent: HTMLElement, anchor = null) {
     parent.insertBefore(child, anchor); // insertBefore 可以等价于appendChild
   },
   remove(child) {

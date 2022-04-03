@@ -11,4 +11,4 @@ export function render(vnode: VNode, container) {
   createRenderer(renderOptions).render(vnode, container);
 }
 
-export * from "@vue/runtime-core";
+export * from "@hpstream/runtime-core";
