@@ -34,6 +34,9 @@ export function createRenderer(options: RendererOptions) {
       }
     }
   };
+  function unmount(_vnode: VNode) {
+    hostRemove(_vnode.el);
+  }
 
   const patch = (
     oldvnode: VNode,
@@ -44,7 +47,7 @@ export function createRenderer(options: RendererOptions) {
     if (oldvnode == newvnode) return;
     if (oldvnode && !isSameVnode(oldvnode, newvnode)) {
       // 判断两个元素是否相同，不相同卸载在添加
-      unmount(oldvnode); // 删除老的
+      unmount(container); // 删除老的
       oldvnode = null;
     }
     // console.log(newvnode);
@@ -109,8 +112,4 @@ export function createRenderer(options: RendererOptions) {
   return {
     render,
   };
-}
-
-function unmount(_vnode: VNode) {
-  throw new Error("Function not implemented.");
 }
