@@ -47,7 +47,7 @@ export function createRenderer(options: RendererOptions) {
     if (oldvnode == newvnode) return;
     if (oldvnode && !isSameVnode(oldvnode, newvnode)) {
       // 判断两个元素是否相同，不相同卸载在添加
-      unmount(container); // 删除老的
+      unmount(oldvnode); // 删除老的
       oldvnode = null;
     }
     // console.log(newvnode);
