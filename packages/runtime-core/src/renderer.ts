@@ -1,4 +1,5 @@
 import { isString, ShapeFlags } from "@hpstream/shared";
+
 import { RendererOptions, VNode } from "./type";
 import { createVNode, isSameVnode, Text } from "./vnode";
 
@@ -14,15 +15,70 @@ export function createRenderer(options: RendererOptions) {
     parentNode: hostParentNode,
     nextSibling: hostNextSibling,
   } = options;
-  const processElement = (n1, n2, container, anchor) => {
+  const processElement = (n1: VNode, n2: VNode, container, anchor) => {
     // console.log(container);
     if (n1 === null) {
       mountElement(n2, container, anchor);
     } else {
+      // console.log(n1, n2)
       // 元素比对
-      // patchElement(n1, n2);
+      patchElement(n1, n2);
     }
   };
+  function patchElement(oldvnode: VNode, newnode: VNode) {
+    let el = (newnode.el = oldvnode.el)
+    const oldProps = oldvnode.props || {};
+    const newProps = newnode.props || {};
+
+
+    patchProps(oldProps, newProps, el);
+    patchChildren(oldvnode, newnode, el)
+
+  }
+
+
+  function patchProps(oldProps: Record<string, any>, newProps: Record<string, any>, el: HTMLElement) {
+    for (let key in newProps) {
+      hostPatchProp(el, key, oldProps[key], newProps[key])
+    }
+    for (let key in oldProps) {
+      if (oldProps[key] === null) {
+        console.log(oldProps[key])
+        hostPatchProp(el, key, oldProps[key], undefined)
+      }
+    }
+
+  }
+
+  function patchChildren(oldvnode: VNode, newnode: VNode, el: HTMLElement) {
+    // 比较两个虚拟节点的儿子的差异 ， el就是当前的父节点
+    const c1 = oldvnode.children;
+    const c2 = newnode.children;
+    const prevShapeFlag = oldvnode.shapeFlag; // 之前的
+    const shapeFlag = newnode.shapeFlag; // 之后的
+
+    if (shapeFlag && ShapeFlags.TEXT_CHILDREN) {
+      if (prevShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+        // 删除所有子节点
+        unmountChildren(oldvnode)  // 文本	数组	（删除老儿子，设置文本内容）
+      }
+      if (c1 !== c2) { // 文本	文本	（更新文本即可）  包括了文本和空
+        hostSetElementText(el, c2)
+      }
+
+    } else {
+
+    }
+
+  }
+  const unmountChildren = (oldvnode: VNode) => {
+    oldvnode.children.forEach((child) => {
+      unmount(child);
+    })
+
+  }
+
+
   const processText = (n1, n2, container) => {
     if (n1 === null) {
       hostInsert((n2.el = hostCreateText(n2.children)), container);
@@ -113,3 +169,6 @@ export function createRenderer(options: RendererOptions) {
     render,
   };
 }
+
+
+
