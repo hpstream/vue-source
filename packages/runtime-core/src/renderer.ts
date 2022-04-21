@@ -67,9 +67,31 @@ export function createRenderer(options: RendererOptions) {
       }
 
     } else {
-
+      // 现在为数组或者为空
+      if (prevShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+        if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {  // 数组	数组	（diff算法）
+          // diff算法
+          // patchKeyedChildren(c1, c2, el); // 全量比对
+        } else {
+          // 现在不是数组 （文本和空 删除以前的）
+          unmountChildren(oldvnode); // 空	数组	（删除所有儿子）
+        }
+      } else {
+        if (prevShapeFlag & ShapeFlags.TEXT_CHILDREN) {
+          hostSetElementText(el, '')   // 数组	文本	（清空文本，进行挂载）
+        }   // 空	文本	（清空文本）
+        if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+          mountChildren(c2, el)   // 数组	文本	（清空文本，进行挂载）
+        }
+      }
     }
+  }
 
+  const mountChildren = (children: VNode[], container) => {
+    for (let i = 0; i < children.length; i++) {
+      let child = normalize(children, i); // 处理后要进行替换，否则childrne中存放的已经是字符串
+      patch(null, child, container)
+    }
   }
   const unmountChildren = (oldvnode: VNode) => {
     oldvnode.children.forEach((child) => {
@@ -165,6 +187,7 @@ export function createRenderer(options: RendererOptions) {
     }
     container._vnode = vnode;
   };
+
   return {
     render,
   };
