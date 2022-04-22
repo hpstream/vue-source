@@ -1,7 +1,7 @@
 import { isArray, isString, ShapeFlags } from "@hpstream/shared";
 import { VNode } from "./type";
 export const Text = Symbol("Text");
-export function isSameVnode(n1, n2) {
+export function isSameVnode(n1: VNode, n2: VNode) {
   // 判断两个虚拟节点是否是相同节点，套路是1）标签名相同 2） key是一样的
   return n1.type === n2.type && n1.key === n2.key;
 }

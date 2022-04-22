@@ -1,3 +1,4 @@
+import { path } from 'path';
 import { isString, ShapeFlags } from "@hpstream/shared";
 
 import { RendererOptions, VNode } from "./type";
@@ -42,8 +43,9 @@ export function createRenderer(options: RendererOptions) {
       hostPatchProp(el, key, oldProps[key], newProps[key])
     }
     for (let key in oldProps) {
-      if (oldProps[key] === null) {
-        console.log(oldProps[key])
+      // console.log(newProps[key], key)
+      if (newProps[key] === undefined) {
+        // console.log(oldProps[key])
         hostPatchProp(el, key, oldProps[key], undefined)
       }
     }
@@ -51,13 +53,14 @@ export function createRenderer(options: RendererOptions) {
   }
 
   function patchChildren(oldvnode: VNode, newnode: VNode, el: HTMLElement) {
+    // debugger
     // 比较两个虚拟节点的儿子的差异 ， el就是当前的父节点
     const c1 = oldvnode.children;
     const c2 = newnode.children;
     const prevShapeFlag = oldvnode.shapeFlag; // 之前的
     const shapeFlag = newnode.shapeFlag; // 之后的
 
-    if (shapeFlag && ShapeFlags.TEXT_CHILDREN) {
+    if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
       if (prevShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
         // 删除所有子节点
         unmountChildren(oldvnode)  // 文本	数组	（删除老儿子，设置文本内容）
@@ -71,7 +74,7 @@ export function createRenderer(options: RendererOptions) {
       if (prevShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
         if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {  // 数组	数组	（diff算法）
           // diff算法
-          // patchKeyedChildren(c1, c2, el); // 全量比对
+          patchKeyedChildren(c1, c2, el); // 全量比对
         } else {
           // 现在不是数组 （文本和空 删除以前的）
           unmountChildren(oldvnode); // 空	数组	（删除所有儿子）
@@ -177,6 +180,63 @@ export function createRenderer(options: RendererOptions) {
     }
   };
 
+  function patchKeyedChildren(c1: VNode[], c2: VNode[], el: HTMLElement) {
+    // sync from start
+    let i = 0;
+    const l2 = c2.length;
+    let e1 = c1.length - 1
+    let e2 = l2 - 1
+    while (i <= e1 && i <= e2) {
+      const n1 = c1[i];
+      const n2 = c2[i];
+      if (isSameVnode(n1, n2)) {
+
+        patch(n1, n2, el)
+      } else {
+        break;
+      }
+      i++;
+    }
+
+    // sync from end
+    while (i <= e1 && i <= e2) {
+      const n1 = c1[e1];
+      const n2 = c2[e2];
+      if (isSameVnode(n1, n2)) {
+        patch(n1, n2, el);
+      } else {
+        break;
+      }
+      e1--;
+      e2--;
+    }
+    // common sequence + mount
+    // i要比e1大说明有新增的
+    // i和e2之间的是新增的部分 
+
+
+    // 有一方全部比较完毕了 ，要么就删除 ， 要么就添加
+    if (i > e1) {
+      if (i <= e2) {
+        while (i <= e2) {
+          const nextPos = e2 + 1;
+          // 根据下一个人的索引来看参照物
+          const anchor = nextPos < c2.length ? c2[nextPos].el : null
+          patch(null, c2[i], el, anchor); // 创建新节点 扔到容器中
+          i++;
+        }
+      }
+    } else if (i > e2) {
+      if (i <= e1) {
+        while (i <= e1) {
+          unmount(c1[i])
+          i++;
+        }
+      }
+    }
+  }
+
+
   const render = (vnode: VNode, container: any) => {
     if (vnode == null) {
       if (container._vnode) {
@@ -192,6 +252,7 @@ export function createRenderer(options: RendererOptions) {
     render,
   };
 }
+
 
 
 
